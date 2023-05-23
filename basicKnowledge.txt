@@ -1,0 +1,6 @@
+- SSR(Server Side Rendering): thuong duoc su dung cho SEO -> html tra ve trong page source 
+    -> req toan bo sau moi lan reload -> req len server -> lay toan bo html.
+- CSR(Client Side Rendering): tra ve div main trong -> doc client trong 1 file js no tra ve
+
+Nodemon: lang nghe su thay doi -> auto restart lai sv khi co thay doi
+Inspector -> Debug
