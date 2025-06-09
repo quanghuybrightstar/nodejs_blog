@@ -1,36 +1,44 @@
 {
-  "name": "nodejs_blog",
-  "version": "1.0.0",
-  "description": "this is tutorial nodejs",
-  "main": "src/index.js",
-  "scripts": {
-    "start": "nodemon src/index.js",
-    "watch": "sass --watch src/resources/scss/style.scss:src/public/css/app.css",
-    "dev": "nodemon --inspect src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/quanghuybrightstar/nodejs_blog.git"
-  },
-  "keywords": [
-    "galvin",
-    "nodejs",
-    "dolphin"
-  ],
-  "author": "Galvin",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/quanghuybrightstar/nodejs_blog/issues"
-  },
-  "homepage": "https://github.com/quanghuybrightstar/nodejs_blog#readme",
-  "dependencies": {
-    "express": "^4.21.2",
-    "express-handlebars": "^8.0.1",
-    "morgan": "^1.10.0",
-    "sass": "^1.84.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
-  }
+    "name": "nodejs_blog",
+    "version": "1.0.0",
+    "description": "this is tutorial nodejs",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "nodemon src/index.js",
+        "watch": "sass --watch src/resources/scss/style.scss:src/public/css/app.css",
+        "dev": "nodemon --inspect src/index.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prettier": "lint-staged",
+        "prepare": "husky"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/quanghuybrightstar/nodejs_blog.git"
+    },
+    "keywords": [
+        "galvin",
+        "nodejs",
+        "dolphin"
+    ],
+    "author": "Galvin",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/quanghuybrightstar/nodejs_blog/issues"
+    },
+    "homepage": "https://github.com/quanghuybrightstar/nodejs_blog#readme",
+    "dependencies": {
+        "express": "^4.21.2",
+        "express-handlebars": "^8.0.1",
+        "morgan": "^1.10.0",
+        "sass": "^1.84.0"
+    },
+    "devDependencies": {
+        "husky": "^9.1.7",
+        "lint-staged": "^16.1.0",
+        "nodemon": "^3.1.7",
+        "prettier": "^3.5.3"
+    },
+    "lint-staged": {
+        "src/**/*.{js,css,scss,json}": "prettier --write"
+    }
 }
