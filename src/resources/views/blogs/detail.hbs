@@ -1,0 +1,14 @@
+<div class="mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <button>Read full</button>
+        </div>
+        {{#with blogDetail}}
+            <div class="col-md-9">
+                <h2>{{title}}</h2>
+                <img src="{{image}}" alt="{{title}}" class="w-100" />
+                <p>{{description}}</p>
+            </div>
+        {{/with}}
+    </div>
+</div>

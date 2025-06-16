@@ -1,8 +1,11 @@
 const newsRouter = require("./news");
 const siteRouter = require("./site");
+const blogRouter = require("./blogs");
 
 const routes = (app) => {
     // Chia MVC
+    app.use("/blogs", blogRouter);
+
     app.use("/news", newsRouter);
 
     app.use("/", siteRouter);

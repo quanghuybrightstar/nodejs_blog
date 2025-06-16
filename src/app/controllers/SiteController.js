@@ -2,12 +2,16 @@ const BlogModel = require("../models/Blog");
 
 class SiteController {
     // [GET] /
-    async index(req, res) {
+    async index(req, res, next) {
         try {
-            const blogs = await BlogModel.find({});
-            res.json(blogs);
+            // day la connect model
+            const blogs = await BlogModel.find({}).lean();
+            // Day la view
+            res.render("home", {
+                blogs,
+            });
         } catch (error) {
-            res.status(400).json({ error: error.message });
+            next(error);
         }
         // res.render("home");
     }
