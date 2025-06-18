@@ -1,0 +1,42 @@
+<div class="mt-4">
+    <h3>
+        Quản lý blogs
+    </h3>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Ảnh</th>
+                <th scope="col">Tiêu đề</th>
+                <th scope="col">Mô tả</th>
+                <th scope="col">Thời gian tạo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each blogs}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>
+                        <img
+                            src="{{this.image}}"
+                            alt="{{this.title}}"
+                            style="width: 60px; height: 60px; object-fit: cover"
+                        />
+                    </td>
+                    <td>{{this.title}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>
+                        <a
+                            href="/blogs/{{this._id}}/edit"
+                            class="btn btn-link"
+                        >Sửa</a>
+                        <a class="btn btn-link">Xóa</a>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+
+    </table>
+</div>

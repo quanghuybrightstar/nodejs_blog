@@ -2,6 +2,9 @@ const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const handlebars = require("express-handlebars");
+
+// Dùng để override lại method -> do form chi support GET/POST
+const methodOverride = require("method-override");
 const app = express();
 const port = 3000;
 
@@ -21,8 +24,19 @@ app.use(express.json());
 // Http logger
 app.use(morgan("combined"));
 
+// Method Overrid
+app.use(methodOverride("_method"));
+
 // Template engine
-app.engine("hbs", handlebars.engine({ extname: ".hbs" }));
+app.engine(
+    "hbs",
+    handlebars.engine({
+        extname: ".hbs",
+        helpers: {
+            sum: (a, b) => a + b,
+        },
+    })
+);
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "resources", "views"));
 
