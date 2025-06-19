@@ -32,7 +32,16 @@
                             href="/blogs/{{this._id}}/edit"
                             class="btn btn-link"
                         >Sửa</a>
-                        <a class="btn btn-link">Xóa</a>
+                        <a
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteBlog"
+                            class="btn btn-link"
+                            data-id="{{this._id}}"
+                            data-title="{{this.title}}"
+                        >
+                            Xóa
+                        </a>
                     </td>
                 </tr>
             {{/each}}
@@ -40,3 +49,74 @@
 
     </table>
 </div>
+
+<div
+    class="modal fade"
+    id="deleteBlog"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="deleteBlogLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteBlogLabel">
+                    Xác nhận xóa blog
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa blog 
+                <strong id="blogTitleToDelete"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="btnDelete"
+                >Có</button>
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Không
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="POST" id="deleteBlogForm"></form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('deleteBlog');
+    const blogTitleElem = document.getElementById('blogTitleToDelete');
+    const deleteForm = document.getElementById('deleteBlogForm');
+    const btnDelete = document.getElementById('btnDelete');
+    let currentId = null;
+
+    modal.addEventListener('show.bs.modal', (event) => {
+        const button = event.relatedTarget;
+        const blogId = button.getAttribute('data-id');
+        const blogTitle = button.getAttribute('data-title');
+
+        currentId = blogId;
+        blogTitleElem.textContent = blogTitle;
+    });
+
+    btnDelete.addEventListener('click', () => {
+        if (!currentId) return;
+        deleteForm.action = `/blogs/delete/${currentId}?_method=DELETE`;
+        deleteForm.submit();
+    });
+});
+</script>

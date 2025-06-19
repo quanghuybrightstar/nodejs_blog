@@ -30,12 +30,12 @@ class BlogController {
         }
     }
 
-    // [Create] /blog/create
+    // [Create] /create
     async create(req, res) {
         res.render("blogs/create");
     }
 
-    // [POST] /blog/store
+    // [POST] /store
     async store(req, res, next) {
         try {
             const formData = req.body;
@@ -53,7 +53,7 @@ class BlogController {
         }
     }
 
-    // [GET] /blogs/management
+    // [GET] /management
     async management(req, res, next) {
         try {
             const blogs = await BlogModel.find({}).lean();
@@ -65,7 +65,7 @@ class BlogController {
         }
     }
 
-    // [Create] /blog/create
+    // [Edit] /edit
     async edit(req, res) {
         const id = req.params.id;
 
@@ -80,7 +80,7 @@ class BlogController {
         }
     }
 
-    // [POST] /blog/store
+    // [PUT] /update/:id
     async update(req, res, next) {
         const id = req.params.id;
         try {
@@ -93,6 +93,18 @@ class BlogController {
             res.redirect("/blogs/management");
         } catch (err) {
             console.error("Lỗi lưu blog:", err);
+            next(err);
+        }
+    }
+
+    // [DELETE] /delete/:id
+    async delete(req, res, next) {
+        const id = req.params.id;
+        try {
+            await BlogModel.deleteOne({ _id: id });
+            res.redirect("/blogs/management");
+        } catch (err) {
+            console.error("Lỗi xóa blog:", err);
             next(err);
         }
     }
