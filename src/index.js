@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const handlebars = require("express-handlebars");
+const moment = require("moment");
 
 // Dùng để override lại method -> do form chi support GET/POST
 const methodOverride = require("method-override");
@@ -34,6 +35,9 @@ app.engine(
         extname: ".hbs",
         helpers: {
             sum: (a, b) => a + b,
+            formatLocal: (utcString, fmt = "HH:mm DD/MM/YYYY") => {
+                return moment(utcString).format(fmt);
+            },
         },
     })
 );

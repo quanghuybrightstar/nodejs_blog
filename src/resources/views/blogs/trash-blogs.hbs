@@ -1,10 +1,10 @@
 <div class="mt-4">
     <div>
         <h3>
-            Quản lý blogs
+            Blog đã xóa
         </h3>
 
-        <a href="/blogs/trash-blogs" class="btn btn-primary">Thùng rác <i class="bi bi-trash"></i></a>
+        <a href="/blogs/management" class="btn btn-primary">Danh sách khóa học</a>
     </div>
 
     <table class="table mt-4">
@@ -30,10 +30,12 @@
                 <td>{{this.description}}</td>
                 <td>{{formatLocal this.createdAt 'HH:mm DD/MM/YYYY'}}</td>
                 <td>
-                    <a href="/blogs/{{this._id}}/edit" class="btn btn-link">Sửa</a>
+                    <a type="button" data-id="{{this._id}}" data-title="{{this.title}}" data-bs-toggle="modal"
+                        data-bs-target="#restoreBlog" class="btn btn-link">Khôi
+                        phục</a>
                     <a type="button" data-bs-toggle="modal" data-bs-target="#deleteBlog" class="btn btn-link"
                         data-id="{{this._id}}" data-title="{{this.title}}">
-                        Xóa
+                        Xóa vĩnh viễn
                     </a>
                 </td>
             </tr>
@@ -42,8 +44,7 @@
             <tr>
                 <td colspan="6">
                     <div class="d-flex flex-column align-items-center gap-2 w-100 text-center">
-                        <span>Bạn chưa đăng blog nào!</span>
-                        <a href="/blogs/create">Đăng blog</a>
+                        <span>Thùng rác trống!</span>
                     </div>
                 </td>
             </tr>
@@ -51,6 +52,30 @@
         </tbody>
 
     </table>
+</div>
+
+<div class="modal fade" id="restoreBlog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="restoreBlogModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="restoreBlogModal">
+                    Xác nhận khôi phục blog
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn khôi phục blog
+                <strong id="blogTitleSelected"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnRestore">Có</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Không
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="deleteBlog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -64,8 +89,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Bạn có chắc chắn muốn xóa blog
-                <strong id="blogTitleToDelete"></strong>?
+                Bạn có chắc chắn muốn xóa vĩnh viễn blog
+                <strong id="blogTitleSelected"></strong>?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" id="btnDelete">Có</button>
@@ -79,26 +104,57 @@
 
 <form method="POST" id="deleteBlogForm"></form>
 
+<form method="POST" id="restoreBlogForm"></form>
+
 <script>
+    const handleSelectBlog = (event) => {
+
+        const button = event.relatedTarget;
+        const blogId = button.getAttribute('data-id');
+        const blogTitle = button.getAttribute('data-title');
+
+        return {
+            blogId,
+            blogTitle
+        }
+    }
     document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('deleteBlog');
-        const blogTitleElem = document.getElementById('blogTitleToDelete');
+        const modalRestore = document.getElementById('restoreBlog');
+        const blogTitleElem = document.getElementById('blogTitleSelected');
         const deleteForm = document.getElementById('deleteBlogForm');
         const btnDelete = document.getElementById('btnDelete');
+
+        const restoreForm = document.getElementById('restoreBlogForm');
+        const btnRestore = document.getElementById('btnRestore');
         let currentId = null;
 
         modal.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget;
-            const blogId = button.getAttribute('data-id');
-            const blogTitle = button.getAttribute('data-title');
+            const { blogId, blogTitle } = handleSelectBlog(event);
 
             currentId = blogId;
             blogTitleElem.textContent = blogTitle;
         });
 
+        modalRestore.addEventListener('show.bs.modal', (event) => {
+            const { blogId, blogTitle } = handleSelectBlog(event);
+
+            currentId = blogId;
+            blogTitleElem.textContent = blogTitle;
+        });
+
+
+        btnRestore.addEventListener('click', (event) => {
+            if (!currentId) return;
+
+            event.preventDefault();
+            restoreForm.action = `/blogs/restore/${currentId}?_method=PATCH`;
+            restoreForm.submit();
+        });
+
         btnDelete.addEventListener('click', () => {
             if (!currentId) return;
-            deleteForm.action = `/blogs/delete/${currentId}?_method=DELETE`;
+            deleteForm.action = `/blogs/delete-force/${currentId}?_method=DELETE`;
             deleteForm.submit();
         });
     });

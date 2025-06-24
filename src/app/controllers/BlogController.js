@@ -6,7 +6,7 @@ class BlogController {
     async index(req, res, next) {
         try {
             // day la connect model
-            const blogs = await BlogModel.find({}).lean();
+            const blogs = await BlogModel.find().lean();
             // Day la view
             res.render("home", {
                 blogs,
@@ -48,7 +48,7 @@ class BlogController {
 
             res.redirect("/blogs/management");
         } catch (err) {
-            console.error("Lỗi lưu blog:", err);
+            console.error("Error creating blog:", err);
             next(err);
         }
     }
@@ -92,7 +92,7 @@ class BlogController {
 
             res.redirect("/blogs/management");
         } catch (err) {
-            console.error("Lỗi lưu blog:", err);
+            console.error("Error updating blog:", err);
             next(err);
         }
     }
@@ -101,10 +101,48 @@ class BlogController {
     async delete(req, res, next) {
         const id = req.params.id;
         try {
-            await BlogModel.deleteOne({ _id: id });
+            await BlogModel.delete({ _id: id });
             res.redirect("/blogs/management");
         } catch (err) {
-            console.error("Lỗi xóa blog:", err);
+            console.error("Error deleting blog:", err);
+            next(err);
+        }
+    }
+
+    // [GET] /trash
+    async trashBlogs(req, res, next) {
+        try {
+            const blogs = await BlogModel.findWithDeleted({
+                deleted: true,
+            }).lean();
+            res.render("blogs/trash-blogs", {
+                blogs,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    // [PATCH] /restore/:id
+    async restoreBlog(req, res, next) {
+        const id = req.params.id;
+        try {
+            await BlogModel.restore({ _id: id });
+            res.redirect("/blogs/trash-blogs");
+        } catch (err) {
+            console.error("Error restoring blog:", err);
+            next(err);
+        }
+    }
+
+    // [DELTE] /delete-force/:id
+    async deleteForceBlog(req, res, next) {
+        const id = req.params.id;
+        try {
+            await BlogModel.deleteOne({ _id: id });
+            res.redirect("/blogs/trash-blogs");
+        } catch (err) {
+            console.error("Error restoring blog:", err);
             next(err);
         }
     }
