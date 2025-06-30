@@ -56,9 +56,14 @@ class BlogController {
     // [GET] /management
     async management(req, res, next) {
         try {
-            const blogs = await BlogModel.find({}).lean();
+            const [blogs, deletedCount] = await Promise.all([
+                BlogModel.find({}).lean(),
+                BlogModel.countDocumentsWithDeleted({ deleted: true }),
+            ]);
+
             res.render("blogs/management", {
                 blogs,
+                deletedCount,
             });
         } catch (error) {
             next(error);

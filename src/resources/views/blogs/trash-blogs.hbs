@@ -14,7 +14,7 @@
                 <th scope="col">Ảnh</th>
                 <th scope="col">Tiêu đề</th>
                 <th scope="col">Mô tả</th>
-                <th scope="col">Thời gian tạo</th>
+                <th scope="col">Thời gian xóa</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -28,7 +28,7 @@
                 </td>
                 <td>{{this.title}}</td>
                 <td>{{this.description}}</td>
-                <td>{{formatLocal this.createdAt 'HH:mm DD/MM/YYYY'}}</td>
+                <td>{{formatLocal this.deletedAt 'HH:mm DD/MM/YYYY'}}</td>
                 <td>
                     <a type="button" data-id="{{this._id}}" data-title="{{this.title}}" data-bs-toggle="modal"
                         data-bs-target="#restoreBlog" class="btn btn-link">Khôi
