@@ -10,6 +10,7 @@ router.get("/create", blogController.create);
 router.post("/store", blogController.store);
 router.put("/update/:id", blogController.update);
 router.patch("/restore/:id", blogController.restoreBlog);
+router.delete("/deletes", blogController.deletes);
 router.delete("/delete/:id", blogController.delete);
 router.delete("/delete-force/:id", blogController.deleteForceBlog);
 router.get("/:id/edit", blogController.edit);

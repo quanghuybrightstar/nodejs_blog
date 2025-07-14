@@ -1,4 +1,17 @@
-<div class="mt-4">
+<form id="containerForm" method="POST" action="/blogs/deletes?_method=DELETE" class="mt-4">
+
+    <div class="d-flex flex-row align-items-center gap-2">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="selectAll">
+            <label class="form-check-label" for="selectAll">
+                Chọn tất cả
+            </label>
+        </div>
+
+        <button type="button" class="btn btn-danger py-1 px-3" id="btnDeleteChecked" disabled>
+            Xóa
+        </button>
+    </div>
     <div>
         <h3>
             Quản lý blogs
@@ -10,6 +23,7 @@
     <table class="table mt-4">
         <thead>
             <tr>
+                <th scope="col"></th>
                 <th scope="col">#</th>
                 <th scope="col">Ảnh</th>
                 <th scope="col">Tiêu đề</th>
@@ -21,7 +35,12 @@
         <tbody>
             {{#each blogs}}
             <tr>
-                <th scope="row">{{sum @index 1}}</th>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="{{this._id}}" name="blogIds[]">
+                    </div>
+                </td>
+                <td scope="row">{{sum @index 1}}</td>
                 <td>
                     <img src="{{this.image}}" alt="{{this.title}}"
                         style="width: 60px; height: 60px; object-fit: cover" />
@@ -51,7 +70,7 @@
         </tbody>
 
     </table>
-</div>
+</form>
 
 <div class="modal fade" id="deleteBlog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="deleteBlogLabel" aria-hidden="true">
@@ -85,6 +104,8 @@
         const blogTitleElem = document.getElementById('blogTitleToDelete');
         const deleteForm = document.getElementById('deleteBlogForm');
         const btnDelete = document.getElementById('btnDelete');
+        const btnDeleteChecked = document.getElementById("btnDeleteChecked");
+        const containerForm = document.getElementById('containerForm');
         let currentId = null;
 
         modal.addEventListener('show.bs.modal', (event) => {
@@ -101,5 +122,40 @@
             deleteForm.action = `/blogs/delete/${currentId}?_method=DELETE`;
             deleteForm.submit();
         });
+
+        // Select All
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const blogIds = document.querySelectorAll('input[name="blogIds[]"]') || [];
+
+        // Render button delete
+        const renderButtonDeleteChecked = () => {
+            const checkedCount = [...blogIds].filter((checkbox) => checkbox.checked).length;
+            if (!checkedCount) {
+                btnDeleteChecked.setAttribute('disabled', true);
+            } else {
+                btnDeleteChecked.removeAttribute('disabled');
+            }
+        }
+
+        selectAllCheckbox.addEventListener('change', () => {
+            blogIds.forEach((checkbox) => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            renderButtonDeleteChecked();
+        });
+
+        // Blog item checkbox
+        blogIds?.forEach((checkbox) => {
+            checkbox.addEventListener('change', () => {
+                const isCheckedAll = [...blogIds].every((checkbox) => checkbox.checked);
+                selectAllCheckbox.checked = isCheckedAll;
+                renderButtonDeleteChecked();
+            });
+        });
+
+        // Delete checked blogs
+        btnDeleteChecked.addEventListener('click', () => {
+            containerForm.submit()
+        })
     });
 </script>

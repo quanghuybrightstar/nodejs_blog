@@ -140,12 +140,23 @@ class BlogController {
         }
     }
 
-    // [DELTE] /delete-force/:id
+    // [DELETE] /delete-force/:id
     async deleteForceBlog(req, res, next) {
         const id = req.params.id;
         try {
             await BlogModel.deleteOne({ _id: id });
             res.redirect("/blogs/trash-blogs");
+        } catch (err) {
+            console.error("Error restoring blog:", err);
+            next(err);
+        }
+    }
+
+    // [DELETE] /deletes
+    async deletes(req, res, next) {
+        try {
+            await BlogModel.delete({ _id: { $in: req.body.blogIds } });
+            res.redirect("/blogs/management");
         } catch (err) {
             console.error("Error restoring blog:", err);
             next(err);
