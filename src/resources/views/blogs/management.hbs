@@ -26,9 +26,18 @@
                 <th scope="col"></th>
                 <th scope="col">#</th>
                 <th scope="col">Ảnh</th>
-                <th scope="col">Tiêu đề</th>
-                <th scope="col">Mô tả</th>
-                <th scope="col">Thời gian tạo</th>
+                <th scope="col">
+                    Tiêu đề
+                    {{{sortable 'name' _sort}}}
+                </th>
+                <th scope="col">
+                    Mô tả
+                    {{{sortable 'description' _sort}}}
+                </th>
+                <th scope="col">
+                    Thời gian tạo
+                    {{{sortable 'createdAt' _sort}}}
+                </th>
                 <th scope="col"></th>
             </tr>
         </thead>

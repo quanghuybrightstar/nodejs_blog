@@ -4,6 +4,9 @@ const morgan = require("morgan");
 const handlebars = require("express-handlebars");
 const moment = require("moment");
 
+// middlewares
+const SortMiddleware = require("./app/middlewares/SortMiddleware.js");
+
 // Dùng để override lại method -> do form chi support GET/POST
 const methodOverride = require("method-override");
 const app = express();
@@ -28,6 +31,9 @@ app.use(morgan("combined"));
 // Method Overrid
 app.use(methodOverride("_method"));
 
+// Middleware
+app.use(SortMiddleware);
+
 // Template engine
 app.engine(
     "hbs",
@@ -37,6 +43,30 @@ app.engine(
             sum: (a, b) => a + b,
             formatLocal: (utcString, fmt = "HH:mm DD/MM/YYYY") => {
                 return moment(utcString).format(fmt);
+            },
+            sortable: (field, sort) => {
+                // Define icon, nextType, label
+                const isCurrentField = field === sort.col;
+                const currentType = isCurrentField ? sort.type : "default";
+
+                // Mapping for labels and types
+                const sortConfig = {
+                    default: { label: "mặc định", nextType: "desc" },
+                    asc: { label: "tăng dần", nextType: "desc" },
+                    desc: { label: "giảm dần", nextType: "asc" },
+                };
+
+                const config = sortConfig[currentType];
+                const icon =
+                    currentType === "asc"
+                        ? "↑"
+                        : currentType === "desc"
+                          ? "↓"
+                          : "";
+
+                return `<a href="?_sort&col=${field}&type=${config.nextType}" title="Sắp xếp ${config.label}">
+                        ${icon} ${config.label}
+                    </a>`;
             },
         },
     })
