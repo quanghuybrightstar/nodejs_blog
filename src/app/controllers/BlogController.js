@@ -57,7 +57,7 @@ class BlogController {
     async management(req, res, next) {
         try {
             const [blogs, deletedCount] = await Promise.all([
-                BlogModel.find({}).lean(),
+                BlogModel.find({}).lean().sortable(req), // Add custom query helper sortable
                 BlogModel.countDocumentsWithDeleted({ deleted: true }),
             ]);
 

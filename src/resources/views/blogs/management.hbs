@@ -24,11 +24,14 @@
         <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col">#</th>
+                <th scope="col">
+                    #
+                    {{{sortable '_id' _sort}}}
+                </th>
                 <th scope="col">Ảnh</th>
                 <th scope="col">
                     Tiêu đề
-                    {{{sortable 'name' _sort}}}
+                    {{{sortable 'title' _sort}}}
                 </th>
                 <th scope="col">
                     Mô tả
@@ -49,7 +52,7 @@
                         <input class="form-check-input" type="checkbox" value="{{this._id}}" name="blogIds[]">
                     </div>
                 </td>
-                <td scope="row">{{sum @index 1}}</td>
+                <td scope="row">{{this.sortId}}</td>
                 <td>
                     <img src="{{this.image}}" alt="{{this.title}}"
                         style="width: 60px; height: 60px; object-fit: cover" />

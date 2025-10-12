@@ -1,4 +1,4 @@
-const SortMiddleware = (req, res, next) => {
+const sortMiddleware = (req, res, next) => {
     res.locals._sort = {
         enabled: false,
         type: "default",
@@ -15,4 +15,4 @@ const SortMiddleware = (req, res, next) => {
     next();
 };
 
-module.exports = SortMiddleware;
+module.exports = sortMiddleware;
